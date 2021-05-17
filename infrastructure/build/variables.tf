@@ -8,15 +8,15 @@ variable "env" {
 }
 
 variable "repository_branch" {
-  default = "develop"
+  default = "main"
 }
 
 variable "repository_owner" {
-  default = "mmmmm"
+  default = "jengm22"
 }
 
 variable "repository_name" {
-  default = "static-web-example"
+  default = "Iac_terraform"
 }
 
 variable "artifacts_bucket_name" {
