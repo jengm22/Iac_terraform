@@ -1,0 +1,23 @@
+version: 0.2
+
+env:
+  variables:
+    NODE_ENV: "${env}"
+
+phases:
+  install:
+    commands:
+      # - install terraform
+      - "wget https://releases.hashicorp.com/terraform/0.15.2/terraform_0.15.2_linux_amd64.zip"
+      - "unzip terraform_0.15.2_linux_amd64.zip"
+      - "mv terraform /usr/local/bin/"
+  pre_build:
+    commands:
+    - cd ../../make plan
+  build:
+    commands:
+    - cd ../../make apply_with_rds
+
+  post_build:
+    commands:
+    - echo "PIPELINE BUILD SUCCESS !!!"
