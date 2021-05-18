@@ -7,6 +7,10 @@ variable "env" {
   default = "dev"
 }
 
+variable "github_token" {
+  default = "mmmmmmmmmmmmmmmm"
+}
+
 variable "repository_branch" {
   default = "main"
 }

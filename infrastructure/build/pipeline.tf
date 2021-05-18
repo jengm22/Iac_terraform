@@ -2,6 +2,7 @@
 resource "aws_codepipeline" "iac_test_pipeline" {
   name     = "iac-test-pipeline"
   role_arn = aws_iam_role.codepipeline_role.arn
+
   tags = {
     Environment = var.env
   }
@@ -9,6 +10,7 @@ resource "aws_codepipeline" "iac_test_pipeline" {
   artifact_store {
     location = var.artifacts_bucket_name
     type     = "S3"
+
   }
 
   stage {
@@ -17,10 +19,10 @@ resource "aws_codepipeline" "iac_test_pipeline" {
     action {
       category = "Source"
       configuration = {
-        "Branch"               = var.repository_branch
-        "Owner"                = var.repository_owner
-        "PollForSourceChanges" = "false"
-        "Repo"                 = var.repository_name
+        "Branch"     = var.repository_branch
+        "OAuthToken" = var.github_token
+        "Owner"      = var.repository_owner
+        "Repo"       = var.repository_name
       }
       input_artifacts = []
       name            = "Source"
@@ -39,7 +41,7 @@ resource "aws_codepipeline" "iac_test_pipeline" {
     action {
       category = "Build"
       configuration = {
-        "ProjectName" = "IaC-Test"
+        "ProjectName" = "iac-test-build"
       }
       input_artifacts = [
         "SourceArtifact",
@@ -52,22 +54,6 @@ resource "aws_codepipeline" "iac_test_pipeline" {
       provider  = "CodeBuild"
       run_order = 1
       version   = "1"
-    }
-  }
-  stage {
-    name = "Deploy"
-
-    action {
-      category = "Deploy"
-      input_artifacts = [
-        "BuildArtifact",
-      ]
-      name             = "Deploy"
-      output_artifacts = []
-      owner            = "AWS"
-      provider         = "Terraform"
-      run_order        = 1
-      version          = "1"
     }
   }
 }

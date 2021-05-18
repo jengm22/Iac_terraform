@@ -8,7 +8,7 @@ data "aws_ssm_parameter" "linuxAmi" {
 resource "aws_key_pair" "master-key" {
   provider   = aws.master
   key_name   = "terraform-iac"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = file("../../id_rsa.pub")
 }
 
 #Create and bootstrap EC2 in eu-west-2
@@ -26,15 +26,6 @@ resource "aws_instance" "mahtarrs-master" {
     Name = join("_", ["mahtarrs_master_tf", count.index + 1])
   }
 
-
-  #The code below is ONLY the provisioner block which needs to be
-  #inserted inside the resource block
-
-  provisioner "local-exec" {
-    command = <<EOF
-aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region} --instance-ids ${self.id}
-ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_templates/install_apache.yml
-EOF
-  }
+  user_data = data.template_cloudinit_config.cloudinit_user_data.rendered
 
 }

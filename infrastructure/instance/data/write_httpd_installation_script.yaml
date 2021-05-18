@@ -1,0 +1,8 @@
+write_files:
+- path: /tmp/install_httpd.sh
+  permissions: 0755
+  encoding: b64
+  content: ${install_httpd}
+
+runcmd:
+- [/bin/bash, /tmp/install_httpd.sh]

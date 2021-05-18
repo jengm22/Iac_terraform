@@ -1,9 +1,5 @@
 version: 0.2
 
-env:
-  variables:
-    NODE_ENV: "${env}"
-
 phases:
   install:
     commands:
@@ -13,10 +9,13 @@ phases:
       - "mv terraform /usr/local/bin/"
   pre_build:
     commands:
-    - cd ../../make plan
+    - echo "........APPLYING PLAN FOR EC2 INSTANCES.........."
+    - "make plan_ec2"
+    - echo ".........APPLYING PLAN FOR DATABASE........."
+    - "make plan_rds"
   build:
     commands:
-    - cd ../../make apply_with_rds
+    - "make apply_with_rds"
 
   post_build:
     commands:

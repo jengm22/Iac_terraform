@@ -17,7 +17,7 @@ resource "aws_codepipeline_webhook" "codepipeline_webhook" {
 
 resource "github_repository_webhook" "github_hook" {
   repository = var.repository_name
-  events     = ["push"]
+  events     = ["issues"]
 
   configuration {
     url          = aws_codepipeline_webhook.codepipeline_webhook.url
